@@ -64,16 +64,16 @@ def fetch_and_analyze_news(api_key: str, query: str) -> pd.DataFrame:
 
 
 # UI
-st.title("📰 Real-Time News Sentiment Dashboard")
+st.title("Real-Time News Sentiment Dashboard")
 st.markdown("Powered by **GNews**, **TextBlob**, and **Streamlit**.")
 
 with st.sidebar:
-    st.header("⚙️ Controls")
+    st.header("settings")
     api_key_secret = st.secrets.get("GNEWS_API_KEY", "")
     if not api_key_secret:
         api_key_secret = st.text_input("Enter your GNews API Key", type="password")
 
-    query = st.text_input("Enter a news topic (e.g., finance, AI, politics)", "finance")
+    query = st.text_input("Enter a news topic")
 
     refresh_button = st.button("Fetch and Analyze News", type="primary")
 
@@ -83,7 +83,7 @@ if refresh_button and api_key_secret:
         df = fetch_and_analyze_news(api_key_secret, query)
 
     if not df.empty:
-        st.success(f"✅ Successfully analyzed {len(df)} articles for '{query}'!")
+        st.success(f" Successfully analyzed {len(df)} articles for '{query}'!")
 
         sentiment_counts = df["sentiment_label"].value_counts()
         col1, col2, col3 = st.columns(3)
@@ -92,7 +92,7 @@ if refresh_button and api_key_secret:
         col3.metric("❌ Negative", sentiment_counts.get("Negative", 0))
 
         # Sentiment distribution chart
-        st.subheader("📊 Sentiment Distribution")
+        st.subheader("Sentiment Distribution")
         chart_data = pd.DataFrame(sentiment_counts).reset_index()
         chart_data.columns = ["sentiment", "count"]
 
@@ -116,6 +116,6 @@ if refresh_button and api_key_secret:
         })
 
     else:
-        st.error("⚠️ Could not retrieve or analyze news. Check your API key or query.")
+        st.error("Could not retrieve or analyze news. Check your API key or query.")
 else:
-    st.info("ℹ️ Enter your GNews API key and a topic, then click 'Fetch and Analyze News' to begin.")
+    st.info(" Enter your GNews API key and a topic, then click 'Fetch and Analyze News' to begin.")
